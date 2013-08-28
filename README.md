@@ -2,7 +2,5 @@
 
 hh.ru python common web utility library.
 
-### Не зависит от 
-* tornado
-* frontik
+Не зависит от tornado, frontik и frontik-testing.
 
