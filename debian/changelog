@@ -1,5 +1,11 @@
 hh-webutils (0.0.1) unstable; urgency=low
 
+  * HH-44245 debianize and add initial infrastructure
+
+ -- Automated Build <a.mishurov@hh.ru>  Mon, 30 Jun 2014 19:58:26 +0400
+
+hh-webutils (0.0.1) unstable; urgency=low
+
   * HH-44245 debianize and add infrastructure
 
  -- Andrey Sumin <an.sumin@hh.ru>  Mon, 23 Jun 2014 15:10:10 +0400
