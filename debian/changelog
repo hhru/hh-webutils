@@ -1,0 +1,5 @@
+hh-webutils (0.0.1) unstable; urgency=low
+
+  * HH-44245 debianize and add infrastructure
+
+ -- Andrey Sumin <an.sumin@hh.ru>  Mon, 23 Jun 2014 15:10:10 +0400
