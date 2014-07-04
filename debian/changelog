@@ -1,4 +1,4 @@
-hh-webutils (0.0.1) unstable; urgency=low
+python-hhwebutils (0.0.1) unstable; urgency=low
 
   * HH-44245 debianize and add infrastructure
 

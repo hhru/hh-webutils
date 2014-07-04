@@ -7,7 +7,7 @@ hh.ru python common web utility library.
 ### Установка и использование
 
 ```
-apt-get install hh-webutils
+apt-get install python-hhwebutils
 # или
 cd hh-webutils ; python setup.py develop
 ```
