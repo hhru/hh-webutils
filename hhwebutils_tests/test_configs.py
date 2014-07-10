@@ -15,6 +15,17 @@ logger = logging.getLogger('test_logger')
 
 
 class TestConfigs(unittest.TestCase):
+    def test_dev_configs_one_file(self):
+        globals_ = {}
+        cfg_path = os.path.join(TESTS_DIR, 'test_configs')
+        dev_configs = map(partial(os.path.join, cfg_path), [DEV_CONFIGS[0]])
+        prod_configs = map(partial(os.path.join, cfg_path), PROD_CONFIGS)
+
+        configs = execute_configs(dev_configs, prod_configs, logger, globals_, globals_)
+
+        self.assertEqual(configs, dev_configs)
+        self.assertTrue(globals_['feature2'])
+
     def test_dev_configs_override(self):
         globals_ = {}
         cfg_path = os.path.join(TESTS_DIR, 'test_configs')
