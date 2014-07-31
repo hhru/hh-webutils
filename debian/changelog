@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.4) unstable; urgency=low
+
+  * HH-44472 fix package version
+
+ -- Automated Build <an.sumin@hh.ru>  Thu, 31 Jul 2014 17:22:15 +0400
+
 python-hhwebutils (0.0.3) unstable; urgency=low
 
   * HH-44472 use dev/prod configs if ANY file found
