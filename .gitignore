@@ -14,8 +14,8 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-debian/hh-webutils.*
-debian/hh-webutils/
+debian/python-hhwebutils.*
+debian/python-hhwebutils/
 debian/files
 
 # Installer logs
