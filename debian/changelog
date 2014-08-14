@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.5) unstable; urgency=low
+
+  * HH-45402 add common date utils and classes
+
+ -- Automated Build <an.sumin@hh.ru>  Fri, 15 Aug 2014 00:14:25 +0400
+
 python-hhwebutils (0.0.4) unstable; urgency=low
 
   * HH-44472 fix package version
