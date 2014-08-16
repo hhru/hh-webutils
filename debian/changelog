@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.6) unstable; urgency=low
+
+  * HH-45663 add hhwebutils.urls.update_url
+
+ -- Automated Build <an.sumin@hh.ru>  Sat, 16 Aug 2014 09:13:41 +0400
+
 python-hhwebutils (0.0.5) unstable; urgency=low
 
   * HH-45402 add common date utils and classes
