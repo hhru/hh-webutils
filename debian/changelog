@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.7) unstable; urgency=low
+
+  * HH-45840 add hhwebutils.url_validator
+
+ -- Automated Build <an.sumin@hh.ru>  Fri, 22 Aug 2014 17:32:52 +0400
+
 python-hhwebutils (0.0.6) unstable; urgency=low
 
   * HH-45663 add hhwebutils.urls.update_url
