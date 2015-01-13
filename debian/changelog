@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.8) unstable; urgency=low
+
+  * HH-49328 Change config file priority
+
+ -- Automated Build <d.smirnov@hh.ru>  Tue, 13 Jan 2015 19:19:24 +0300
+
 python-hhwebutils (0.0.7) unstable; urgency=low
 
   * HH-45840 add hhwebutils.url_validator
