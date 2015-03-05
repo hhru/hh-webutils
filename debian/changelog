@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.9) unstable; urgency=low
+
+  * HH-50656 Fix tests requirements
+
+ -- Automated Build <a.mishurov@hh.ru>  Thu, 05 Mar 2015 15:36:46 +0300
+
 python-hhwebutils (0.0.8) unstable; urgency=low
 
   * HH-49328 Change config file priority
