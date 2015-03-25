@@ -9,6 +9,7 @@ Build-Depends:
   python-setuptools,
   python-nose,
   python-dateutil,
+  python-lxml,
 Standards-Version: 3.9.3
 X-Python-Version: >= 2.7
 
@@ -20,4 +21,5 @@ Depends:
   python,
   python-setuptools,
   python-dateutil,
+  python-lxml,
 Description: hh.ru python common web utility library

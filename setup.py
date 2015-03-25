@@ -34,9 +34,10 @@ setup(
     url='https://github.com/hhru/hh-webutils',
     cmdclass={'build_py': BuildHook, 'test': TestHook},
     packages=find_packages(exclude=['hhwebutils_tests']),
-    tests_require=[
-        "nose",
-        "pep8 >=1.5,<1.6",
+    install_requires=[
+        'nose',
+        'pep8 >=1.5,<1.6',
+        'lxml >= 2.2.4',
     ],
     zip_safe=False
 )
