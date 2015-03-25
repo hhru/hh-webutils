@@ -26,19 +26,20 @@ def execute_configs(development_configs, production_configs, logger, globals_, l
 
 
 def parse_configs(main_configs, overrides, logger, globals_, locals_):
-    find_existing = lambda paths: next((path for path in paths if os.path.exists(path)), None)
+    find_existing = lambda paths: list(filter(os.path.exists, paths))
 
     def _execute_config(config_file):
         logger.info('executing application config file at {}'.format(config_file))
         execfile(config_file, globals_, locals_)
 
-    config = find_existing(main_configs)
-    override = find_existing(overrides)
+    configs_main = find_existing(main_configs)
+    configs_overrides = find_existing(overrides)
 
-    if config is None:
+    if not configs_main:
         raise Exception('No suitable config files found (tried {})'.format(main_configs))
 
-    configs = filter(None, [config, override])
+    configs = configs_main[:1]
+    configs.extend(configs_overrides)
 
     for cfg in configs:
         _execute_config(cfg)
