@@ -1,3 +1,10 @@
+python-hhwebutils (0.0.12) unstable; urgency=low
+
+  * HH-54803 add pager
+  * HH-53135 Add url validator documentation
+
+ -- Automated Build <s.chernatkin@hh.ru>  Wed, 09 Sep 2015 16:44:51 +0300
+
 python-hhwebutils (0.0.11) unstable; urgency=low
 
   * HH-51123 enable to pass few override configs
