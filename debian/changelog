@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.13) unstable; urgency=low
+
+  * HH-57174 not used date functions were removed
+
+ -- Automated Build <m.leontyeva@hh.ru>  Sun, 27 Dec 2015 17:59:37 +0300
+
 python-hhwebutils (0.0.12) unstable; urgency=low
 
   * HH-54803 add pager
