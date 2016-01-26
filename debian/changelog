@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.14) unstable; urgency=low
+
+  * HH-57112 move date_intervals from xhh
+
+ -- Automated Build <i.khokhryakov@hh.ru>  Tue, 26 Jan 2016 11:43:59 +0300
+
 python-hhwebutils (0.0.13) unstable; urgency=low
 
   * HH-57174 not used date functions were removed
