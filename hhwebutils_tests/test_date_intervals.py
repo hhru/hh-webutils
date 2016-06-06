@@ -1,11 +1,12 @@
 # coding=utf-8
+
 from datetime import datetime
-from common import TestCaseWithXml
+import unittest
 
 from hhwebutils import date_intervals
 
 
-class TestDateIntervals(TestCaseWithXml):
+class TestDateIntervals(unittest.TestCase):
 
     def test_get_date_interval(self):
         self.assertEqual(date_intervals.get_date_interval(datetime(2010, 10, 30), datetime(2012, 10, 30)), (2, 1))
