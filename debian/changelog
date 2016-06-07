@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.15) unstable; urgency=low
+
+  * Bump version up to 0.0.15
+
+ -- Automated Build <an.sumin@hh.ru>  Tue, 07 Jun 2016 18:45:50 +0300
+
 python-hhwebutils (0.0.14) unstable; urgency=low
 
   * HH-57112 move date_intervals from xhh
