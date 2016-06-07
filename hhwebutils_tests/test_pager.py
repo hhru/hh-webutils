@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 
-from common import TestCaseWithXml
 import logging
 
-logger = logging.getLogger('test_logger')
-
-from frontik.testing.xml_asserts import XmlTestCaseMixin
+from lxml import etree
+from lxml_asserts.testcase import LxmlTestCaseMixin
 
 import hhwebutils.pager as ph
 
+logger = logging.getLogger('test_logger')
 
-class TestPageHelpersPaging(TestCaseWithXml, XmlTestCaseMixin):
+
+class TestPageHelpersPaging(LxmlTestCaseMixin):
     def get_dots_pages(self, xml):
         return xml.xpath('item[@text="..."]/@page')
 
@@ -117,7 +117,7 @@ class TestPageHelpersPaging(TestCaseWithXml, XmlTestCaseMixin):
                                                          items_on_page=1,
                                                          current_page=cur_page,
                                                          paging_links_number=10)
-            self.assertEquals([str(cur_page-10), '99'], self.get_dots_pages(paging_xml))
+            self.assertEquals([str(cur_page - 10), '99'], self.get_dots_pages(paging_xml))
 
         for cur_page in xrange(94, 100):
             current_page, paging_xml = ph.get_paging_xml(logger,
@@ -125,7 +125,7 @@ class TestPageHelpersPaging(TestCaseWithXml, XmlTestCaseMixin):
                                                          items_on_page=1,
                                                          current_page=cur_page,
                                                          paging_links_number=10)
-            self.assertEquals([str(cur_page-10)], self.get_dots_pages(paging_xml))
+            self.assertEquals([str(cur_page - 10)], self.get_dots_pages(paging_xml))
 
         for cur_page in xrange(6):
             current_page, paging_xml = ph.get_paging_xml(logger,
@@ -141,7 +141,7 @@ class TestPageHelpersPaging(TestCaseWithXml, XmlTestCaseMixin):
                                                          items_on_page=1,
                                                          current_page=cur_page,
                                                          paging_links_number=10)
-            self.assertEquals([str(cur_page-10), str(cur_page + 10)], self.get_dots_pages(paging_xml))
+            self.assertEquals([str(cur_page - 10), str(cur_page + 10)], self.get_dots_pages(paging_xml))
 
     def test_paging_links_limit(self):
         current_page, paging_xml = ph.get_paging_xml(logger,
@@ -242,3 +242,10 @@ class TestPageHelpersPaging(TestCaseWithXml, XmlTestCaseMixin):
             '''.strip()
         self.assertXmlEqual(expected, paging_xml)
         self.assertEquals(3, current_page)
+
+    def assertXpathInXml(self, xml, xpath):
+        nodes = xml.xpath(xpath)
+        self.assertNotEqual(
+            nodes, [],
+            '\n"{0}" have no matches in \n{1}'.format(xpath, etree.tostring(xml, pretty_print=True))
+        )

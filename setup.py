@@ -35,9 +35,13 @@ setup(
     cmdclass={'build_py': BuildHook, 'test': TestHook},
     packages=find_packages(exclude=['hhwebutils_tests']),
     install_requires=[
-        'nose',
-        'pep8 >=1.5,<1.6',
         'lxml >= 2.2.4',
+    ],
+    test_suite='hhwebutils_tests',
+    tests_require=[
+        'nose',
+        'lxml-asserts',
+        'pycodestyle == 2.0.0'
     ],
     zip_safe=False
 )
