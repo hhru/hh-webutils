@@ -3,6 +3,7 @@
 import unittest
 
 from hhwebutils import urls
+from hhwebutils.compat import urlparse
 
 
 class TestUrls(unittest.TestCase):
@@ -16,6 +17,7 @@ class TestUrls(unittest.TestCase):
         ('y.ru?id=1', {}, [], 'y.ru?id=1'),
         ('http://y.ru?id=1', {}, [], 'http://y.ru?id=1'),
         ('myapp://y.ru?id=1', {}, [], 'myapp://y.ru?id=1'),
+        (u'myapp://y.ru/тест=abc?id=1', {}, [], 'myapp://y.ru/тест=abc?id=1'),
         ('http://y.ru?id=1', {}, ['id'], 'http://y.ru'),
         ('myapp://y.ru?id=1', {}, ['id'], 'myapp://y.ru'),
         ('http://y.ru?id=1', {'x': 'y'}, [], 'http://y.ru?x=y&id=1'),
@@ -47,10 +49,18 @@ class TestUrls(unittest.TestCase):
          'asdfasdf:///test?code=%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82&param=1'),
         ('asdfasdf:///test?param=1', {'code': u'test'.encode('latin1')}, [], 'asdfasdf:///test?code=test&param=1'),
         (u'http://alexey@myapp.ru:8080/path/to/app?key=%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B0', {'code': '123'}, [],
-         u'http://alexey@myapp.ru:8080/path/to/app?code=123&key=%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B0'),
+         'http://alexey@myapp.ru:8080/path/to/app?code=123&key=%D0%BC%D0%BE%D1%81%D0%BA%D0%B2%D0%B0'),
+        (u'http://alexey@myapp.ru:8080/path/to/app?key=привет', {'code': '123'}, [],
+         'http://alexey@myapp.ru:8080/path/to/app?code=123&key=%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82'),
     ]
 
     def test_update_url(self):
         for url, update_args, remove_args, result in self.test_data:
-            formatted = urls.update_url(url, update_args, remove_args)
-            self.assertEqual(formatted, result)
+            updated_url = urlparse.urlsplit(urls.update_url(url, update_args, remove_args))
+            result_url = urlparse.urlsplit(result)
+
+            self.assertEqual(updated_url.scheme, result_url.scheme)
+            self.assertEqual(updated_url.netloc, result_url.netloc)
+            self.assertEqual(updated_url.path, result_url.path)
+            self.assertEqual(urlparse.parse_qs(updated_url.query), urlparse.parse_qs(result_url.query))
+            self.assertEqual(updated_url.fragment, result_url.fragment)
