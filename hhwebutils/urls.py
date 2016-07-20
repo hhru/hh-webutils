@@ -2,10 +2,12 @@ from collections import Iterable
 from collections import Mapping
 
 import urllib
-import urlparse
+
+from hhwebutils.compat import unicode_type, urlencode, urlparse
 
 
 def update_url(url, update_args=None, remove_args=None):
+
     scheme, sep, url_new = url.partition('://')
     if len(scheme) == len(url):
         scheme = ''
@@ -22,7 +24,7 @@ def update_url(url, update_args=None, remove_args=None):
     if remove_args:
         query_dict = {k: query_dict.get(k) for k in query_dict if k not in remove_args}
 
-    query = urllib.urlencode(query_dict, doseq=True)
+    query = urlencode(query_dict, doseq=True)
 
     # specific case without net location
     # warning: does not preserve original string type
@@ -46,14 +48,14 @@ def _to_native_string(s):
     if isinstance(s, str):
         return s
 
-    if isinstance(s, unicode):
+    if isinstance(s, unicode_type):
         return s.encode('utf-8')
 
     return s.decode('utf-8')
 
 
 def _deep_encode(data):
-    if isinstance(data, (bytes, unicode)):
+    if isinstance(data, (bytes, unicode_type)):
         return _to_native_string(data)
 
     if isinstance(data, Mapping):

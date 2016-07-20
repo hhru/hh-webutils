@@ -1,4 +1,5 @@
-# coding: utf-8
+# coding=utf-8
+
 import unittest
 
 from lxml import etree
@@ -13,7 +14,7 @@ class XmlToStringTestCase(unittest.TestCase):
         self.ns_id = 'hha'
         self.ns_attrib = 'xmlns:{s.ns_id}="{s.ns}"'.format(s=self)
 
-        self.content = '''
+        self.content = u'''
 до текст
 <tag1>content</tag1>
 между текст
@@ -44,20 +45,20 @@ class XmlToStringTestCase(unittest.TestCase):
 <tag4/>
 после текст'''
 
-        self.sample_xml_with_ns = '''\
+        self.sample_xml_with_ns = u'''\
 <wrapper {s.ns_attrib}>
 <{s.ns_id}:body>{s.content}
 <{s.ns_id}:tagWithNs>abc</{s.ns_id}:tagWithNs></{s.ns_id}:body>
 после body – этот текст нам не нужен
 </wrapper>'''.format(s=self)
 
-        self.sample_xml = '''\
+        self.sample_xml = u'''\
 <wrapper>
 <body>{s.content}</body>
 после body – этот текст нам не нужен
 </wrapper>'''.format(s=self)
 
-        self.sample_html_as_xml = '''\
+        self.sample_html_as_xml = u'''\
 <wrapper>
 <body>
 <div/>
@@ -122,13 +123,13 @@ class XmlToStringTestCase(unittest.TestCase):
     def test_clean_ns(self):
         body = self._get_ns_body()
         real = xml_to_string(body, clean_xmlns=True)
-        self._assert_strings(real, self.content.decode('utf-8') + u'\n<tagWithNs>abc</tagWithNs>')
+        self._assert_strings(real, self.content + u'\n<tagWithNs>abc</tagWithNs>')
 
     def test_without_ns(self):
         body = etree.fromstring(self.sample_xml).find('body'.format(s=self))
         self.assertEqual(body.tag, 'body')
         real = xml_to_string(body)
-        self._assert_strings(real, self.content.decode('utf-8'))
+        self._assert_strings(real, self.content)
         self.assertEqual(xml_to_string(body, clean_xmlns=True), real)
 
     def test_html(self):
