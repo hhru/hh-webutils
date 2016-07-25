@@ -16,15 +16,15 @@ logger = logging.getLogger('test_logger')
 
 
 def get_configs_path(configs):
-    return map(partial(os.path.join, CFG_PATH), configs)
+    return [os.path.join(CFG_PATH, cfg) for cfg in configs]
 
 
 class TestConfigs(unittest.TestCase):
     def test_dev_configs_one_file(self):
         globals_ = {}
         cfg_path = os.path.join(TESTS_DIR, 'test_configs')
-        dev_configs = map(partial(os.path.join, cfg_path), [DEV_CONFIGS[0]])
-        prod_configs = map(partial(os.path.join, cfg_path), PROD_CONFIGS)
+        dev_configs = [os.path.join(cfg_path, DEV_CONFIGS[0])]
+        prod_configs = [os.path.join(cfg_path, cfg) for cfg in PROD_CONFIGS]
 
         configs = execute_configs(dev_configs, prod_configs, logger, globals_, globals_)
 
@@ -34,8 +34,8 @@ class TestConfigs(unittest.TestCase):
     def test_dev_configs_override(self):
         globals_ = {}
         cfg_path = os.path.join(TESTS_DIR, 'test_configs')
-        dev_configs = map(partial(os.path.join, cfg_path), DEV_CONFIGS)
-        prod_configs = map(partial(os.path.join, cfg_path), PROD_CONFIGS)
+        dev_configs = [os.path.join(cfg_path, cfg) for cfg in DEV_CONFIGS]
+        prod_configs = [os.path.join(cfg_path, cfg) for cfg in PROD_CONFIGS]
 
         configs = execute_configs(dev_configs, prod_configs, logger, globals_, globals_)
 
@@ -45,8 +45,8 @@ class TestConfigs(unittest.TestCase):
 
     def test_prod_configs(self):
         globals_ = {}
-        dev_configs = map(partial(os.path.join, TESTS_DIR, 'test_configs_not_exists'), DEV_CONFIGS)
-        prod_configs = map(partial(os.path.join, TESTS_DIR, 'test_configs'), PROD_CONFIGS)
+        dev_configs = [os.path.join(TESTS_DIR, 'test_configs_not_exists', cfg) for cfg in DEV_CONFIGS]
+        prod_configs = [os.path.join(TESTS_DIR, 'test_configs', cfg) for cfg in PROD_CONFIGS]
 
         configs = execute_configs(dev_configs, prod_configs, logger, globals_, globals_)
 
@@ -55,8 +55,8 @@ class TestConfigs(unittest.TestCase):
 
     def test_no_configs(self):
         cfg_path = os.path.join(TESTS_DIR, 'test_configs_not_exists')
-        dev_configs = map(partial(os.path.join, cfg_path), DEV_CONFIGS)
-        prod_configs = map(partial(os.path.join, cfg_path), PROD_CONFIGS)
+        dev_configs = [os.path.join(cfg_path, cfg) for cfg in DEV_CONFIGS]
+        prod_configs = [os.path.join(cfg_path, cfg) for cfg in PROD_CONFIGS]
 
         self.assertRaises(Exception, execute_configs, dev_configs, prod_configs, logger, {}, {})
 

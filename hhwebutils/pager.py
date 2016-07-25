@@ -23,7 +23,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
             max_page = int(total_pages) - 1
         else:
             items_number = int(items_number)
-            max_page = max(0, (items_number - 1) / items_on_page)
+            max_page = max(0, (items_number - 1) // items_on_page)
     except (TypeError, ValueError):
         logger.error(('Paging generator: Incorrect parameter type. Int or numeric string was expected, '
                       'items_on_page number must be greater then 0.'
@@ -38,7 +38,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
     if max_page < 1:
         return current_page, None
 
-    start_page = max(0, current_page - paging_links_number / 2)
+    start_page = max(0, current_page - paging_links_number // 2)
 
     end_page = start_page + paging_links_number - paging_links_number % 2
     if end_page > max_page:
@@ -51,7 +51,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
     if start_page > 0:
         etree.SubElement(el_pager, 'item', text='...', page=str(max(0, current_page - paging_links_number)))
 
-    for i in xrange(start_page, end_page + 1):
+    for i in range(start_page, end_page + 1):
         el = etree.SubElement(el_pager, 'item', text=str(i + 1), page=str(i))
         if i == current_page:
             el.set('selected', 'true')

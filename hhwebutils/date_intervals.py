@@ -1,11 +1,13 @@
 # coding=utf-8
+
 from collections import namedtuple
-from itertools import imap
+from functools import reduce
 
 DateInterval = namedtuple('DateInterval', ('start_date', 'end_date'))
 
 
-def _get_date_interval_in_months((start_date, end_date)):
+def _get_date_interval_in_months(interval):
+    start_date, end_date = interval
     return (end_date.year - start_date.year) * 12 + end_date.month - start_date.month + 1
 
 
@@ -29,6 +31,6 @@ def get_date_intervals_union(intervals):
 
 
 def get_date_intervals_sum(intervals):
-    years, months = divmod(sum(imap(_get_date_interval_in_months, intervals)), 12)
+    years, months = divmod(sum(_get_date_interval_in_months(i) for i in intervals), 12)
     split_years, months = divmod(months, 12)
     return years + split_years, months

@@ -17,6 +17,6 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
         # then clean unused namespaces
         etree.cleanup_namespaces(node)
     parts = [node.text]
-    parts.extend(etree.tostring(c, encoding=unicode, method=method) for c in node.iterchildren())
+    parts.extend(etree.tostring(c, encoding='unicode', method=method) for c in node.iterchildren())
     parts = filter(None, parts)
     return u''.join(parts)
