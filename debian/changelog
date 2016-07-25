@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.16) unstable; urgency=low
+
+  * Bump version up to 0.0.16
+
+ -- Automated Build <an.sumin@hh.ru>  Mon, 25 Jul 2016 17:26:10 +0300
+
 python-hhwebutils (0.0.15) unstable; urgency=low
 
   * Bump version up to 0.0.15
