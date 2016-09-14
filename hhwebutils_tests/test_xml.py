@@ -1,10 +1,11 @@
 # coding=utf-8
-
+import sys
+import time
 import unittest
 
 from lxml import etree
 
-from hhwebutils.xml import xml_to_string
+from hhwebutils.xml import xml_to_string, strip_invalid_characters
 
 
 class XmlToStringTestCase(unittest.TestCase):
@@ -149,3 +150,50 @@ class XmlToStringTestCase(unittest.TestCase):
                 if rchar == '\n':
                     line += 1
                     pos = 0
+
+
+class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
+
+    def is_unicode_32bit_supported(self):
+        try:
+            unichr(0x10FFFF)
+            return True
+        except ValueError:
+            return False
+
+    def check_in_range(self, from_, to, encode=False):
+        element = etree.Element('test')
+        for char_int in xrange(from_, to + 1):
+            try:
+                char = unichr(char_int)
+                if encode:
+                    char = char.encode('utf-8')
+                stripped = strip_invalid_characters(char)
+                element.text = stripped
+                element.set('some_attr', stripped)
+            except Exception as e:
+                self.fail(r'Failed on unicode char \0x{char:x}: {e}'.format(char=char_int, e=e))
+
+    def test_all_16bit_unicode_chars(self):
+        start = time.time()
+        self.check_in_range(0, 0xFFFF)
+        self.check_in_range(0, 0xFFFF, encode=True)
+        sys.stderr.write('Time taken: {:.0f}ms'.format((time.time() - start) * 1000))
+
+    def test_all_32bit_unicode_chars(self):
+        if self.is_unicode_32bit_supported():
+            start = time.time()
+            self.check_in_range(0xFFFF, 0x10FFFF)
+            self.check_in_range(0xFFFF, 0x10FFFF, encode=True)
+            sys.stderr.write('Time taken: {:.0f}ms'.format((time.time() - start) * 1000))
+        else:
+            sys.stderr.write('This python version not supported 32bit unicode\n')
+
+    def test_utf8_encoded_str(self):
+        value = u'\x85'.encode('utf-8') + ' пример utf-8 строки'
+        res = strip_invalid_characters(value)
+        self.assertIsInstance(res, unicode)
+        self.assertEqual(res, u'\x85 пример utf-8 строки')
+
+    def test_not_basestring(self):
+        self.assertEqual(strip_invalid_characters(5), u'5')

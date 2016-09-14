@@ -6,6 +6,19 @@ from lxml import etree
 
 __clean_ns_re = re.compile(r'^({.*})(.*)$')
 
+# http://www.w3.org/TR/xml/#charsets
+_INVALID_CHARACTERS_REGEXP = re.compile(u'[' +
+                                        u'\x00-\x08' +
+                                        u'\x0b' +
+                                        u'\x0c' +
+                                        u'\x0e-\x1F' +
+                                        u'\x7f-\x84'
+                                        u'\x86-\x9f'
+                                        u'\uD800-\uDFFF' +
+                                        u'\uFDD0-\uFDEF' +
+                                        u'\uFFFE' +
+                                        u'\uFFFF]')
+
 
 def xml_to_string(node, clean_xmlns=False, method='xml'):
     if clean_xmlns:
@@ -20,3 +33,11 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
     parts.extend(etree.tostring(c, encoding='unicode', method=method) for c in node.iterchildren())
     parts = filter(None, parts)
     return u''.join(parts)
+
+
+def strip_invalid_characters(string):
+    if isinstance(string, str):
+        string = string.decode('utf-8')
+    elif not isinstance(string, unicode):
+        string = unicode(string)
+    return _INVALID_CHARACTERS_REGEXP.sub(u'', string)
