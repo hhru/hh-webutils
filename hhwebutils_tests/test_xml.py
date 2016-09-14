@@ -5,6 +5,7 @@ import unittest
 
 from lxml import etree
 
+from hhwebutils.compat import unicode_type, unicode_chr
 from hhwebutils.xml import xml_to_string, strip_invalid_characters
 
 
@@ -156,21 +157,24 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
 
     def is_unicode_32bit_supported(self):
         try:
-            unichr(0x10FFFF)
+            unicode_chr(0x10FFFF)
             return True
         except ValueError:
             return False
 
     def check_in_range(self, from_, to, encode=False):
         element = etree.Element('test')
-        for char_int in xrange(from_, to + 1):
+        for char_int in range(from_, to + 1):
             try:
-                char = unichr(char_int)
+                char = unicode_chr(char_int)
                 if encode:
                     char = char.encode('utf-8')
                 stripped = strip_invalid_characters(char)
                 element.text = stripped
                 element.set('some_attr', stripped)
+            except UnicodeEncodeError as e:
+                if e.reason != 'surrogates not allowed':
+                    raise
             except Exception as e:
                 self.fail(r'Failed on unicode char \0x{char:x}: {e}'.format(char=char_int, e=e))
 
@@ -190,9 +194,9 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
             sys.stderr.write('This python version not supported 32bit unicode\n')
 
     def test_utf8_encoded_str(self):
-        value = u'\x85'.encode('utf-8') + ' пример utf-8 строки'
+        value = u'\x85 пример utf-8 строки'.encode('utf-8')
         res = strip_invalid_characters(value)
-        self.assertIsInstance(res, unicode)
+        self.assertIsInstance(res, unicode_type)
         self.assertEqual(res, u'\x85 пример utf-8 строки')
 
     def test_not_basestring(self):

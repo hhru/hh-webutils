@@ -4,6 +4,8 @@ from copy import deepcopy
 
 from lxml import etree
 
+from hhwebutils.compat import bytes_type, unicode_type
+
 __clean_ns_re = re.compile(r'^({.*})(.*)$')
 
 # http://www.w3.org/TR/xml/#charsets
@@ -36,8 +38,8 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
 
 
 def strip_invalid_characters(string):
-    if isinstance(string, str):
+    if isinstance(string, bytes_type):
         string = string.decode('utf-8')
-    elif not isinstance(string, unicode):
-        string = unicode(string)
+    elif not isinstance(string, unicode_type):
+        string = unicode_type(string)
     return _INVALID_CHARACTERS_REGEXP.sub(u'', string)
