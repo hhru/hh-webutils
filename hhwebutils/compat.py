@@ -10,7 +10,6 @@ if PY3:
     from urllib.parse import unquote
     from urllib.parse import urlencode
 
-    bytes_type = bytes
     unicode_type = str
     unicode_chr = chr
 
@@ -20,6 +19,5 @@ else:
     from urllib import urlencode
     import urlparse
 
-    bytes_type = str
     unicode_type = unicode
     unicode_chr = unichr

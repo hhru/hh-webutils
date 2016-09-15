@@ -4,7 +4,7 @@ from copy import deepcopy
 
 from lxml import etree
 
-from hhwebutils.compat import bytes_type, unicode_type
+from hhwebutils.compat import unicode_type
 
 __clean_ns_re = re.compile(r'^({.*})(.*)$')
 
@@ -38,7 +38,7 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
 
 
 def strip_invalid_characters(string):
-    if isinstance(string, bytes_type):
+    if isinstance(string, bytes):
         string = string.decode('utf-8')
     elif not isinstance(string, unicode_type):
         string = unicode_type(string)
