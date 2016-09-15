@@ -1,6 +1,5 @@
 # coding=utf-8
 import sys
-import time
 import unittest
 
 from lxml import etree
@@ -179,17 +178,13 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
                 self.fail(r'Failed on unicode char \0x{char:x}: {e}'.format(char=char_int, e=e))
 
     def test_all_16bit_unicode_chars(self):
-        start = time.time()
         self.check_in_range(0, 0xFFFF)
         self.check_in_range(0, 0xFFFF, encode=True)
-        sys.stderr.write('Time taken: {:.0f}ms'.format((time.time() - start) * 1000))
 
     def test_all_32bit_unicode_chars(self):
         if self.is_unicode_32bit_supported():
-            start = time.time()
             self.check_in_range(0xFFFF, 0x10FFFF)
             self.check_in_range(0xFFFF, 0x10FFFF, encode=True)
-            sys.stderr.write('Time taken: {:.0f}ms'.format((time.time() - start) * 1000))
         else:
             sys.stderr.write('This python version not supported 32bit unicode\n')
 
