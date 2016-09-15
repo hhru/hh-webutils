@@ -8,6 +8,14 @@ from hhwebutils.compat import unicode_type, unicode_chr
 from hhwebutils.xml import xml_to_string, strip_invalid_characters
 
 
+def is_unicode_32bit_supported():
+    try:
+        unicode_chr(0x10FFFF)
+        return True
+    except ValueError:
+        return False
+
+
 class XmlToStringTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -154,13 +162,6 @@ class XmlToStringTestCase(unittest.TestCase):
 
 class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
 
-    def is_unicode_32bit_supported(self):
-        try:
-            unicode_chr(0x10FFFF)
-            return True
-        except ValueError:
-            return False
-
     def check_in_range(self, from_, to, encode=False):
         element = etree.Element('test')
         for char_int in range(from_, to + 1):
@@ -181,12 +182,10 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
         self.check_in_range(0, 0xFFFF)
         self.check_in_range(0, 0xFFFF, encode=True)
 
+    @unittest.skipIf(not is_unicode_32bit_supported(), 'This python version does not support 32bit unicode')
     def test_all_32bit_unicode_chars(self):
-        if self.is_unicode_32bit_supported():
-            self.check_in_range(0xFFFF, 0x10FFFF)
-            self.check_in_range(0xFFFF, 0x10FFFF, encode=True)
-        else:
-            sys.stderr.write('This python version not supported 32bit unicode\n')
+        self.check_in_range(0xFFFF, 0x10FFFF)
+        self.check_in_range(0xFFFF, 0x10FFFF, encode=True)
 
     def test_utf8_encoded_str(self):
         value = u'\x85 пример utf-8 строки'.encode('utf-8')
