@@ -1,10 +1,19 @@
 # coding=utf-8
-
+import sys
 import unittest
 
 from lxml import etree
 
-from hhwebutils.xml import xml_to_string
+from hhwebutils.compat import unicode_type, unicode_chr
+from hhwebutils.xml import xml_to_string, strip_invalid_characters
+
+
+def is_unicode_32bit_supported():
+    try:
+        unicode_chr(0x10FFFF)
+        return True
+    except ValueError:
+        return False
 
 
 class XmlToStringTestCase(unittest.TestCase):
@@ -149,3 +158,40 @@ class XmlToStringTestCase(unittest.TestCase):
                 if rchar == '\n':
                     line += 1
                     pos = 0
+
+
+class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
+
+    def check_in_range(self, from_, to, encode=False):
+        element = etree.Element('test')
+        for char_int in range(from_, to + 1):
+            try:
+                char = unicode_chr(char_int)
+                if encode:
+                    char = char.encode('utf-8')
+                stripped = strip_invalid_characters(char)
+                element.text = stripped
+                element.set('some_attr', stripped)
+            except UnicodeEncodeError as e:
+                if e.reason != 'surrogates not allowed':
+                    raise
+            except Exception as e:
+                self.fail(r'Failed on unicode char \0x{char:x}: {e}'.format(char=char_int, e=e))
+
+    def test_all_16bit_unicode_chars(self):
+        self.check_in_range(0, 0xFFFF)
+        self.check_in_range(0, 0xFFFF, encode=True)
+
+    @unittest.skipIf(not is_unicode_32bit_supported(), 'This python version does not support 32bit unicode')
+    def test_all_32bit_unicode_chars(self):
+        self.check_in_range(0xFFFF, 0x10FFFF)
+        self.check_in_range(0xFFFF, 0x10FFFF, encode=True)
+
+    def test_utf8_encoded_str(self):
+        value = u'\x85 пример utf-8 строки'.encode('utf-8')
+        res = strip_invalid_characters(value)
+        self.assertIsInstance(res, unicode_type)
+        self.assertEqual(res, u'\x85 пример utf-8 строки')
+
+    def test_not_basestring(self):
+        self.assertEqual(strip_invalid_characters(5), u'5')
