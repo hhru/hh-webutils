@@ -1,3 +1,13 @@
+python-hhwebutils (0.0.18) unstable; urgency=low
+
+  * HH-62711 use unittest.skipIf
+  * HH-62711 remove time logging from unit test
+  * HH-62711 use bytes alias
+  * HH-62711 resolve py3 compatibility issues
+  * HH-62711 copy strip_invalid_characters from logic
+
+ -- Automated Build <i.khokhryakov@hh.ru>  Mon, 19 Sep 2016 15:22:23 +0300
+
 python-hhwebutils (0.0.17) unstable; urgency=low
 
   * Bump version up to 0.0.17
