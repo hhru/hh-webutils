@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from collections import Iterable
 from collections import Mapping
 
@@ -8,9 +10,17 @@ from hhwebutils.compat import unicode_type, urlencode, urlparse
 
 def update_url(url, update_args=None, remove_args=None):
 
+    # Определяем схему и обрабатываем её вручную, в урле оставляем `//`.
+    # Нужно для работы с кастомными схемами (`magic://`) в 2.7.3, см. баг:
+    # http://bugs.python.org/issue9374 (исправлен в 2.7.4)
     scheme, sep, url_new = url.partition('://')
+    trim_fake_slashes = False
+
     if len(scheme) == len(url):
         scheme = ''
+        if not url.startswith('//'):
+            trim_fake_slashes = True
+            url = '//' + url
     else:
         url = '//' + url_new
 
@@ -26,7 +36,8 @@ def update_url(url, update_args=None, remove_args=None):
 
     query = urlencode(query_dict, doseq=True)
 
-    # specific case without net location
+    # Нужно для работы с кастомными схемами без netloc, см. баг:
+    # http://bugs.python.org/issue8339 (wont fix).
     # warning: does not preserve original string type
     if not url_split.netloc:
         return ''.join([
@@ -39,9 +50,15 @@ def update_url(url, update_args=None, remove_args=None):
             _to_native_string(url_split.fragment)
         ])
 
-    return urlparse.urlunsplit(
+    result = urlparse.urlunsplit(
         [_to_native_string(part) for part in (scheme, url_split.netloc, url_split.path, query, url_split.fragment)]
     )
+
+    # Убираем слеши, добавленные выше, если `urlunsplit` не убрал их сам.
+    if trim_fake_slashes and result.startswith('//'):
+        result = result[2:]
+
+    return result
 
 
 def _to_native_string(s):
