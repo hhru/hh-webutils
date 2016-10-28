@@ -1,3 +1,10 @@
+python-hhwebutils (0.0.19) unstable; urgency=low
+
+  * HH-59628 Fix potential test fails caused by order of object keys
+  * HH-59628 Fix update_url for "host:port" format, add more tests
+
+ -- Automated Build <y.zhanov@hh.ru>  Fri, 28 Oct 2016 16:19:02 +0300
+
 python-hhwebutils (0.0.18) unstable; urgency=low
 
   * HH-62711 use unittest.skipIf
