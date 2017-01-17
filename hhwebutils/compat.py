@@ -13,6 +13,9 @@ if PY3:
     unicode_type = str
     unicode_chr = chr
 
+    def iteritems(d, **kw):
+        return d.items(**kw)
+
 else:
     from urllib import quote
     from urllib import unquote
@@ -21,3 +24,6 @@ else:
 
     unicode_type = unicode
     unicode_chr = unichr
+
+    def iteritems(d, **kw):
+        return d.iteritems(**kw)
