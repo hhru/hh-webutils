@@ -60,7 +60,6 @@ SEARCH_BOTS = {
     'SimplePie': 'SimplePie',
     'SiteLockSpider': 'SiteLockSpider',
     'OkHttp': 'okhttp/',
-    'Curl': 'curl/',
     'BLEXBot': 'BLEXBot/',
     'ScoutJet': 'ScoutJet'
 }
