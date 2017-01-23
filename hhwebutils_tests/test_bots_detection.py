@@ -1,5 +1,6 @@
 import unittest
 
+from hhwebutils import compat
 from hhwebutils import bots_detection
 
 
@@ -10,5 +11,5 @@ class TestBotDetector(unittest.TestCase):
     }
 
     def test_bots_detector(self):
-        for bot_name, string in self.BOTS.iteritems():
+        for bot_name, string in compat.iteritems(self.BOTS):
             self.assertEqual(bots_detection.get_bot_name(string), bot_name)
