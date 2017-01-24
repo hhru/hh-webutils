@@ -1,3 +1,10 @@
+python-hhwebutils (0.0.20) unstable; urgency=low
+
+  * HH-65694 code review
+  * HH-65694 add bots detector
+
+ -- Automated Build <y.vanchinov@hh.ru>  Tue, 24 Jan 2017 12:07:19 +0300
+
 python-hhwebutils (0.0.19) unstable; urgency=low
 
   * HH-59628 Fix potential test fails caused by order of object keys
