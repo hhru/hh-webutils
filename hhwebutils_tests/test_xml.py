@@ -195,3 +195,6 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
 
     def test_not_basestring(self):
         self.assertEqual(strip_invalid_characters(5), u'5')
+
+    def test_none(self):
+        self.assertEqual(strip_invalid_characters(None), u'')
