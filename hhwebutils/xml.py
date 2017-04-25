@@ -38,8 +38,13 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
 
 
 def strip_invalid_characters(string):
+    if string is None:
+        return u''
+
     if isinstance(string, bytes):
         string = string.decode('utf-8')
+
     elif not isinstance(string, unicode_type):
         string = unicode_type(string)
+
     return _INVALID_CHARACTERS_REGEXP.sub(u'', string)
