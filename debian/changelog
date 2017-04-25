@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.21) unstable; urgency=low
+
+  * HH-67226 do not convert None to 'None' in strip_invalid_characters
+
+ -- Automated Build <e.petrukovich@hh.by>  Tue, 25 Apr 2017 16:04:24 +0300
+
 python-hhwebutils (0.0.20) unstable; urgency=low
 
   * HH-65694 code review
