@@ -2,7 +2,7 @@
 
 import os
 
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.build_py import build_py
 from setuptools.command.test import test
 
@@ -31,7 +31,7 @@ setup(
     long_description=open('README.md').read(),
     url='https://github.com/hhru/hh-webutils',
     cmdclass={'build_py': BuildHook, 'test': TestHook},
-    packages=find_packages(exclude=['hhwebutils_tests']),
+    packages=['hhwebutils'],
     install_requires=[
         'lxml >= 2.2.4',
     ],
