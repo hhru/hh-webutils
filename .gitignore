@@ -2,6 +2,7 @@
 
 # Packages
 *.egg
+.eggs/
 *.egg-info
 dist
 build
@@ -16,7 +17,11 @@ lib
 lib64
 debian/python-hhwebutils.*
 debian/python-hhwebutils/
+debian/python3-hhwebutils.*
+debian/python3-hhwebutils/
 debian/files
+debian/debhelper-build-stamp
+.pybuild/
 
 # Installer logs
 pip-log.txt
