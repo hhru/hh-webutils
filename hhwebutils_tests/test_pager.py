@@ -188,7 +188,7 @@ class TestPageHelpersPaging(LxmlTestCaseMixin, unittest.TestCase):
         current_page, paging_xml = ph.get_paging_xml(logger, items_number=100, items_on_page=1, current_page=93,
                                                      paging_links_number=10)
         self.assertEquals(self.get_pages_items(paging_xml)[0].get('page'), '88')
-        self.assertEquals(self.get_pages_items(paging_xml)[-1].get('page'), '98')
+        self.assertEquals(self.get_pages_items(paging_xml)[-1].get('page'), '99')
 
         for cur_page in range(94, 100):
             current_page, paging_xml = ph.get_paging_xml(logger, items_number=100, items_on_page=1,
