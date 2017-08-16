@@ -1,8 +1,11 @@
 # coding=utf-8
 
 import unittest
+import os.path
 
 import pycodestyle
+
+from hhwebutils_tests import PROJECT_DIR
 
 
 class TestPycodestyle(unittest.TestCase):
@@ -16,5 +19,5 @@ class TestPycodestyle(unittest.TestCase):
             ignore=['E731']
         )
 
-        result = style_guide.check_files(TestPycodestyle.CHECKED_FILES)
+        result = style_guide.check_files([os.path.join(PROJECT_DIR, p) for p in TestPycodestyle.CHECKED_FILES])
         self.assertEqual(result.total_errors, 0, 'Pycodestyle found code style errors or warnings')
