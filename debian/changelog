@@ -1,3 +1,10 @@
+python-hhwebutils (0.0.23) unstable; urgency=medium
+
+  * HH-71647 jsonp callback & js identifier validators
+  * HH-71647 add python 3.6 to travis, CWD insensitive codestyle tests
+
+ -- Automated Build <n.kovalev@hh.ru>  Wed, 16 Aug 2017 14:29:15 +0300
+
 python-hhwebutils (0.0.22) unstable; urgency=medium
 
   * HH-71506 build python3 deb package
