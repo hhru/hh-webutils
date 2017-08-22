@@ -50,6 +50,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
 
     if start_page > 0:
         etree.SubElement(el_pager, 'item', text='...', page=str(max(0, current_page - paging_links_number)))
+        etree.SubElement(el_pager, 'firstPage', page='0')
 
     for i in range(start_page, end_page + 1):
         el = etree.SubElement(el_pager, 'item', text=str(i + 1), page=str(i))
@@ -58,7 +59,6 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
 
     if end_page < max_page:
         etree.SubElement(el_pager, 'item', text='...', page=str(min(max_page, current_page + paging_links_number)))
-        etree.SubElement(el_pager, 'firstPage', page='0')
 
     if end_page == max_page - 1:
         etree.SubElement(el_pager, 'item', text=str(max_page + 1), page=str(max_page),)
