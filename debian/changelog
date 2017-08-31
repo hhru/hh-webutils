@@ -1,3 +1,10 @@
+python-hhwebutils (0.0.24) unstable; urgency=medium
+
+  * HH-71540  clean up
+  * HH-71540 add new attribute to pager xml; update pager tests
+
+ -- Automated Build <y.vanchinov@hh.ru>  Thu, 31 Aug 2017 13:54:01 +0300
+
 python-hhwebutils (0.0.23) unstable; urgency=medium
 
   * HH-71647 jsonp callback & js identifier validators
