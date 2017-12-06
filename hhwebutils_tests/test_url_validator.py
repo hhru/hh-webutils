@@ -8,6 +8,8 @@ from hhwebutils import url_validator
 class TestUrlValidator(unittest.TestCase):
     def test_invalid_characters(self):
         self.assertEqual(url_validator.validate(''), None)
+        self.assertEqual(url_validator.validate('', 'filter'), None)
+        self.assertEqual(url_validator.validate('', 'validate'), None)
 
         self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru'), 'http://xfdf"dsy   a.ru')
         self.assertEqual(url_validator.validate('http//fasdfsdf^&^&#.ru'), None)
@@ -135,4 +137,69 @@ class TestUrlValidator(unittest.TestCase):
             ),
             u'http://www.proprofs.com/quiz-school/usercertificate.php?uname=%D0%90%D0%BB%D0%B5%D0%BA%D1%81%D0%B0'
             u'%D0%BD%D0%B4%D1%80%20%D0%9C%D1%8F%D1%81%D0%BD%D0%B8%D0%BA%D0%BE%D0%B2'
+        )
+
+    def test_validate_backurl(self):
+        permitted_hosts = ['hh.ru']
+
+        permitted_app_schemes = ['app']
+
+        def validate_backurl(url, fallback='/'):
+            return url_validator.validate_backurl(
+                url,
+                permitted_hosts,
+                permitted_app_schemes,
+                fallback
+            )
+
+        self.assertEqual(validate_backurl(''), '/')
+        self.assertEqual(validate_backurl(None), '/')
+        self.assertEqual(validate_backurl(None), '/')
+        self.assertEqual(validate_backurl('', None), None)
+        self.assertEqual(validate_backurl(None, None), None)
+
+        self.assertEqual(validate_backurl('data:sdfsdfff'), '/')
+        self.assertEqual(validate_backurl('javascript:alert();//'), '/')
+        self.assertEqual(validate_backurl('javascript:alert(document.cookie);'), '/')
+        self.assertEqual(validate_backurl('javascripT://anything%0D%0A%0D%0Awindow.alert(document.cookie)'), '/')
+
+        self.assertEqual(validate_backurl('myapp://applicant/resumes'), '/')
+
+        self.assertEqual(validate_backurl('/ff.ru'), '/ff.ru')
+        self.assertEqual(validate_backurl('ttp:/ff.ru'), '/')
+        self.assertEqual(validate_backurl('ttp://ff.ru'), '/')
+
+        self.assertEqual(validate_backurl('hh.ru'), 'hh.ru')
+        self.assertEqual(validate_backurl('https://ya.ru'), '/')
+        self.assertEqual(validate_backurl('https://ya.ru', None), None)
+        self.assertEqual(validate_backurl('https://hh.ru'), 'https://hh.ru')
+        self.assertEqual(validate_backurl('app://applicant/resumes'), 'app://applicant/resumes')
+
+        self.assertEqual(
+            validate_backurl('jav&#x0A;ascript:alert("XSS");'), 'jav&#x0A;ascript:alert("XSS");'
+        )
+
+        self.assertEqual(
+            validate_backurl('path/to/something'),
+            'path/to/something'
+        )
+
+        self.assertEqual(
+            validate_backurl('/path/to/user/12345'),
+            '/path/to/user/12345'
+        )
+
+        self.assertEqual(
+            validate_backurl('https://hh.ru/path/to/something'),
+            'https://hh.ru/path/to/something'
+        )
+
+        self.assertEqual(
+            validate_backurl('/path?param1=value1&param2=value2'),
+            '/path?param1=value1&param2=value2'
+        )
+
+        self.assertEqual(
+            validate_backurl('/path/to/something#withhash'),
+            '/path/to/something#withhash'
         )
