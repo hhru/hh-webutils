@@ -1,6 +1,5 @@
 # coding=utf-8
 
-from functools import reduce
 import re
 
 from hhwebutils.compat import quote, unquote, urlparse, unicode_type
@@ -37,7 +36,6 @@ def validate_backurl(backurl, permitted_hosts, permitted_schemes, fallback='/'):
 
     return _validate(
         backurl,
-        level='filter',
         fallback=fallback,
         default_scheme='https',
         permitted_hosts=permitted_hosts,
@@ -80,13 +78,20 @@ def _validate(
 
         return sanitize_scheme(url)
 
+    def is_local_url(url):
+        # https://docs.microsoft.com/en-us/aspnet/mvc/overview/security/preventing-open-redirection-attacks
+        url = unquote(url)
+        return (
+            url[0] == '/' and (len(url) == 1 or (url[1] not in ('/', '\\')))
+        )
+
     def sanitize_scheme(url):
         if permitted_schemes is not None and is_permitted_scheme(url, permitted_schemes):
             return url
 
         scheme = urlparse.urlsplit(unquote(url)).scheme
         if not scheme and allow_relative_urls:
-            return url
+            return url if is_local_url(url) else fallback
         if scheme not in VALID_SCHEMES:
             if level in ('validate', 'filter'):
                 parts = urlparse.urlsplit(url)
@@ -99,18 +104,19 @@ def _validate(
 
     def sanitize_path(url):
         parts = urlparse.urlsplit(unquote(url))
+        host = parts.netloc
 
-        if parts.hostname is None or parts.hostname == '':
+        if not parts.hostname or '\\' in host:
             return fallback
 
         if permitted_hosts is not None:
-            host = parts.netloc
-            if not any(
-                host == valid_host or host.endswith('.' + valid_host) for valid_host in permitted_hosts
-            ):
+            if not any(host_matches(host, valid_host) for valid_host in permitted_hosts):
                 return fallback
 
         return url
+
+    def host_matches(host, valid_host):
+        return host == valid_host or host.endswith('.' + valid_host)
 
     try:
         return sanitize_value(url)
