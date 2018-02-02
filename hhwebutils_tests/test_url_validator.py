@@ -20,10 +20,9 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(
             url_validator.validate(
                 'http://&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;'
-                '&#40;&#39;&#88;&#83;&#83;&#39;&#41;'
+                '&#40;&#39;&#88;&#83;&#83;&#39;&#41;.ru'
             ),
-            'http://&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;'
-            '&#40;&#39;&#88;&#83;&#83;&#39;&#41;'
+            None
         )
 
         self.assertEqual(
@@ -32,23 +31,20 @@ class TestUrlValidator(unittest.TestCase):
                 '&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083'
                 '&#0000039&#0000041'
             ),
-            'http://&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116'
-            '&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083'
-            '&#0000039&#0000041'
+            None
         )
 
         self.assertEqual(url_validator.validate('jav&#x09;ascript:alert("XSS");'), None)
         self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru', 'filter'), 'http://xfdf"dsy   a.ru')
-        self.assertEqual(url_validator.validate('http//fasdfsdf^&^&#.ru', 'filter'), 'http://http//fasdfsdf^&^&#.ru')
+        self.assertEqual(url_validator.validate('http//fasdfsdf^&^&#.ru', 'filter'), None)
         self.assertEqual(
-            url_validator.validate('jav&#x0A;ascript:alert("XSS");', 'filter'), 'http://jav&#x0A;ascript:alert("XSS");'
+            url_validator.validate('jav&#x0A;ascript:alert("XSS");', 'filter'), None
         )
 
         self.assertEqual(url_validator.validate('http://h\th.ru', 'filter'), 'http://hh.ru')
 
         self.assertEqual(
-            url_validator.validate('javascript%3Aalert%28%22aa%22%29', 'filter'),
-            'http://javascript%3Aalert%28%22aa%22%29'
+            url_validator.validate('javascript%3Aalert%28%22aa%22%29', 'filter'), None
         )
 
         self.assertEqual(
@@ -56,8 +52,7 @@ class TestUrlValidator(unittest.TestCase):
                 '&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;'
                 '&#88;&#83;&#83;&#39;&#41;', 'filter'
             ),
-            'http://&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;'
-            '&#40;&#39;&#88;&#83;&#83;&#39;&#41;'
+            None
         )
 
         self.assertEqual(
@@ -66,14 +61,17 @@ class TestUrlValidator(unittest.TestCase):
                 '&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039'
                 '&#0000041', 'filter'
             ),
-            'http://&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116'
-            '&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083'
-            '&#0000039&#0000041'
+            None
         )
 
         self.assertEqual(
-            url_validator.validate('jav&#x09;ascript:alert("XSS");', 'filter'), 'http://jav&#x09;ascript:alert("XSS");'
+            url_validator.validate('jav&#x09;ascript:alert("XSS");', 'filter'), None
         )
+
+    def test_invalid_host(self):
+        self.assertEqual(url_validator.validate('hhru'), None)
+        self.assertEqual(url_validator.validate('hhru', 'validate'), None)
+        self.assertEqual(url_validator.validate('hhru.', 'validate'), None)
 
     def test_invalid_scheme(self):
         self.assertEqual(url_validator.validate('ff.ru'), None)
@@ -83,15 +81,14 @@ class TestUrlValidator(unittest.TestCase):
 
         self.assertEqual(url_validator.validate('//ff.ru', 'validate'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('http://www.ff.ru/dfd"fs', 'validate'), 'http://www.ff.ru/dfd"fs')
-        self.assertEqual(url_validator.validate('javascript:alert(\'aa\');', 'validate'), 'http://alert(\'aa\');')
+        self.assertEqual(url_validator.validate("javascript:alert('aa');", 'validate'), None)
         self.assertEqual(
             url_validator.validate('javascript:alert(document.cookie);', 'validate'), 'http://alert(document.cookie);'
         )
 
         self.assertEqual(url_validator.validate('//ff.ru', 'filter'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('ff.ru?a=10#fff', 'filter'), 'http://ff.ru?a=10#fff')
-        self.assertEqual(url_validator.validate('/page1?a=10#fff', 'filter'), 'http://page1?a=10#fff')
-        self.assertEqual(url_validator.validate('/page1/?a=10#fff', 'filter'), 'http://page1/?a=10#fff')
+        self.assertEqual(url_validator.validate('/page1?a=10#fff', 'filter'), None)
         self.assertEqual(url_validator.validate('/ff.ru', 'filter'), 'http://ff.ru')
         self.assertEqual(url_validator.validate(':/ff.ru', 'filter'), None)
         self.assertEqual(url_validator.validate('ttp:/ff.ru', 'filter'), 'http://ff.ru')
@@ -114,6 +111,7 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(url_validator.validate('?logoff.do', 'filter'), None)
 
     def test_valid_url(self):
+        self.assertEqual(url_validator.validate('hh.r', 'validate'), 'http://hh.r')
         self.assertEqual(url_validator.validate('http://hh.ru'), 'http://hh.ru')
         self.assertEqual(
             url_validator.validate('http://hh.ru/path/path?parma1=23&param2=выавыа#dd'),
