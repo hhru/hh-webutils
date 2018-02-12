@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.28) unstable; urgency=medium
+
+  * HH-76237 primitive hostname validation
+
+ -- Automated Build <m.piryatinets@hh.ru>  Mon, 12 Feb 2018 12:15:16 +0300
+
 python-hhwebutils (0.0.27) unstable; urgency=medium
 
   * HH-75010 fix backurl validation. Deprecate scheme-relative urls. Add
