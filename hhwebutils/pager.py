@@ -5,6 +5,37 @@ from lxml import etree
 
 def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, items_on_page=10,
                    paging_links_number=10, user_agent=''):
+    current_page, paging = get_paging(
+        logger, items_number, total_pages, current_page, items_on_page, paging_links_number, user_agent
+    )
+
+    if current_page is None or paging is None:
+        return current_page, paging
+
+    el_pager = etree.Element('pager')
+    etree.SubElement(el_pager, 'previous', page=paging['previous']['page'], disabled=paging['previous']['disabled'])
+
+    if paging.get('firstPage') is not None:
+        etree.SubElement(el_pager, 'firstPage', page=paging['firstPage']['page'])
+
+    for item in paging.get('pages', []):
+        el = etree.SubElement(el_pager, 'item', text=item['text'], page=item['page'])
+        if item.get('selected'):
+            el.set('selected', 'true')
+
+    if paging.get('lastPage') is not None:
+        etree.SubElement(el_pager, 'lastPage', page=paging['lastPage']['page'])
+
+    if paging.get('next') is not None:
+        etree.SubElement(el_pager, 'next', page=paging['next']['page'], disabled=paging['next']['disabled'])
+
+    etree.SubElement(el_pager, 'os').text = paging['os']
+
+    return current_page, el_pager
+
+
+def get_paging(logger, items_number=None, total_pages=None, current_page=0, items_on_page=10,
+               paging_links_number=10, user_agent=''):
     """
     :raise TypeError: if no one of `items_number` nor `total_pages` specified or specified both
 
@@ -45,28 +76,52 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
         end_page = max_page
         start_page = max(0, end_page - paging_links_number)
 
-    el_pager = etree.Element('pager')
-    etree.SubElement(el_pager, 'previous', page=str(current_page - 1), disabled=str(current_page == 0))
+    pager = dict(previous={'page': str(current_page - 1), 'disabled': str(current_page == 0)})
+
+    pager['pages'] = []
 
     if start_page > 0:
-        etree.SubElement(el_pager, 'item', text='...', page=str(max(0, current_page - paging_links_number)))
-        etree.SubElement(el_pager, 'firstPage', page='0')
+        pager['pages'].append({
+            'text': '...',
+            'page': str(max(0, current_page - paging_links_number)),
+            'selected': False,
+        })
+
+        pager['firstPage'] = {
+            'page': '0'
+        }
 
     for i in range(start_page, end_page + 1):
-        el = etree.SubElement(el_pager, 'item', text=str(i + 1), page=str(i))
-        if i == current_page:
-            el.set('selected', 'true')
+        pager['pages'].append({
+            'text': str(i + 1),
+            'page': str(i),
+            'selected': i == current_page,
+        })
 
     if end_page < max_page:
-        etree.SubElement(el_pager, 'item', text='...', page=str(min(max_page, current_page + paging_links_number)))
+        pager['pages'].append({
+            'text': '...',
+            'page': str(min(max_page, current_page + paging_links_number)),
+            'selected': False,
+        })
 
     if end_page == max_page - 1:
-        etree.SubElement(el_pager, 'item', text=str(max_page + 1), page=str(max_page),)
+        pager['pages'].append({
+            'text': str(max_page + 1),
+            'page': str(max_page),
+            'selected': False,
+        })
 
     if end_page < max_page - 1:
-        etree.SubElement(el_pager, 'lastPage', page=str(max_page))
+        pager['lastPage'] = {
+            'page': str(max_page),
+            'selected': False,
+        }
 
-    etree.SubElement(el_pager, 'next', page=str(current_page + 1), disabled=str(current_page == max_page))
+    pager['next'] = {
+        'page': str(current_page + 1),
+        'disabled': str(current_page == max_page),
+    }
 
     user_agent = user_agent.lower()
     if 'mac' in user_agent:
@@ -76,6 +131,6 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
     else:
         os = 'Win'
 
-    etree.SubElement(el_pager, 'os').text = os
+    pager['os'] = os
 
-    return current_page, el_pager
+    return current_page, pager
