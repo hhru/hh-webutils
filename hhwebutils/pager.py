@@ -9,7 +9,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
         logger, items_number, total_pages, current_page, items_on_page, paging_links_number, user_agent
     )
 
-    if current_page is None or paging is None:
+    if paging is None:
         return current_page, paging
 
     el_pager = etree.Element('pager')
@@ -77,41 +77,36 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
         end_page = max_page
         start_page = max(0, end_page - paging_links_number)
 
-    pager = dict(previous={'page': current_page - 1, 'disabled': current_page == 0})
+    pager = {
+        'previous': {
+            'page': current_page - 1,
+            'disabled': current_page == 0,
+        },
+        'pages': []
+    }
 
-    pager['pages'] = []
+    def add_page(text, page, selected=False):
+        pager['pages'].append({
+            'text': text,
+            'page': page,
+            'selected': selected,
+        })
 
     if start_page > 0:
-        pager['pages'].append({
-            'text': '...',
-            'page': max(0, current_page - paging_links_number),
-            'selected': False,
-        })
+        add_page('...', max(0, current_page - paging_links_number))
 
         pager['firstPage'] = {
             'page': 0
         }
 
     for i in range(start_page, end_page + 1):
-        pager['pages'].append({
-            'text': str(i + 1),
-            'page': i,
-            'selected': i == current_page,
-        })
+        add_page(str(i + 1), i, i == current_page)
 
     if end_page < max_page:
-        pager['pages'].append({
-            'text': '...',
-            'page': min(max_page, current_page + paging_links_number),
-            'selected': False,
-        })
+        add_page('...', min(max_page, current_page + paging_links_number))
 
     if end_page == max_page - 1:
-        pager['pages'].append({
-            'text': str(max_page + 1),
-            'page': max_page,
-            'selected': False,
-        })
+        add_page(str(max_page + 1), max_page)
 
     if end_page < max_page - 1:
         pager['lastPage'] = {
