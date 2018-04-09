@@ -13,21 +13,22 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
         return current_page, paging
 
     el_pager = etree.Element('pager')
-    etree.SubElement(el_pager, 'previous', page=paging['previous']['page'], disabled=paging['previous']['disabled'])
+    etree.SubElement(
+        el_pager, 'previous', page=str(paging['previous']['page']), disabled=str(paging['previous']['disabled']))
 
     if paging.get('firstPage') is not None:
-        etree.SubElement(el_pager, 'firstPage', page=paging['firstPage']['page'])
+        etree.SubElement(el_pager, 'firstPage', page=str(paging['firstPage']['page']))
 
     for item in paging.get('pages', []):
-        el = etree.SubElement(el_pager, 'item', text=item['text'], page=item['page'])
+        el = etree.SubElement(el_pager, 'item', text=item['text'], page=str(item['page']))
         if item.get('selected'):
             el.set('selected', 'true')
 
     if paging.get('lastPage') is not None:
-        etree.SubElement(el_pager, 'lastPage', page=paging['lastPage']['page'])
+        etree.SubElement(el_pager, 'lastPage', page=str(paging['lastPage']['page']))
 
     if paging.get('next') is not None:
-        etree.SubElement(el_pager, 'next', page=paging['next']['page'], disabled=paging['next']['disabled'])
+        etree.SubElement(el_pager, 'next', page=str(paging['next']['page']), disabled=str(paging['next']['disabled']))
 
     etree.SubElement(el_pager, 'os').text = paging['os']
 
@@ -76,51 +77,51 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
         end_page = max_page
         start_page = max(0, end_page - paging_links_number)
 
-    pager = dict(previous={'page': str(current_page - 1), 'disabled': str(current_page == 0)})
+    pager = dict(previous={'page': current_page - 1, 'disabled': current_page == 0})
 
     pager['pages'] = []
 
     if start_page > 0:
         pager['pages'].append({
             'text': '...',
-            'page': str(max(0, current_page - paging_links_number)),
+            'page': max(0, current_page - paging_links_number),
             'selected': False,
         })
 
         pager['firstPage'] = {
-            'page': '0'
+            'page': 0
         }
 
     for i in range(start_page, end_page + 1):
         pager['pages'].append({
             'text': str(i + 1),
-            'page': str(i),
+            'page': i,
             'selected': i == current_page,
         })
 
     if end_page < max_page:
         pager['pages'].append({
             'text': '...',
-            'page': str(min(max_page, current_page + paging_links_number)),
+            'page': min(max_page, current_page + paging_links_number),
             'selected': False,
         })
 
     if end_page == max_page - 1:
         pager['pages'].append({
             'text': str(max_page + 1),
-            'page': str(max_page),
+            'page': max_page,
             'selected': False,
         })
 
     if end_page < max_page - 1:
         pager['lastPage'] = {
-            'page': str(max_page),
+            'page': max_page,
             'selected': False,
         }
 
     pager['next'] = {
-        'page': str(current_page + 1),
-        'disabled': str(current_page == max_page),
+        'page': current_page + 1,
+        'disabled': current_page == max_page,
     }
 
     user_agent = user_agent.lower()
