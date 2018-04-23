@@ -4,7 +4,7 @@ from lxml import etree
 
 
 def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, items_on_page=10,
-                   paging_links_number=10, user_agent=''):
+                   paging_links_number=5, user_agent=''):
     current_page, paging = get_paging(
         logger, items_number, total_pages, current_page, items_on_page, paging_links_number, user_agent
     )
