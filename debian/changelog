@@ -1,3 +1,11 @@
+python-hhwebutils (0.0.30) unstable; urgency=medium
+
+  * HH-78245 update the default amount of pager list items
+  * HH-76660 add .hh-release file
+  * HH-78245 update the default amount of pager list items
+
+ -- Automated Build <d.smirnov@hh.ru>  Fri, 27 Apr 2018 16:44:40 +0300
+
 python-hhwebutils (0.0.29) unstable; urgency=medium
 
   * HH-78151 Add tests to get_paging
