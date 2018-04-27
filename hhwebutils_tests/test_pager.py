@@ -24,7 +24,7 @@ class TestPageHelpersPaging(LxmlTestCaseMixin, unittest.TestCase):
     def assert_selected_page(self, xml, expected_page):
         try:
             page = int(xml.xpath('item[@selected="true"]/@page')[0])
-        except:
+        except Exception:
             page = None
         self.assertEqual(page, expected_page,
                          'Expected selected page in xml: "{0}", got "{1}"'.format(expected_page, page))
@@ -100,16 +100,16 @@ class TestPageHelpersPaging(LxmlTestCaseMixin, unittest.TestCase):
 
     def test_pager_items_count(self):
         current_page, paging_xml = ph.get_paging_xml(logger, items_number=101, items_on_page=10)
-        self.assertEqual(len(self.get_all_items(paging_xml)), 11)
+        self.assertEqual(len(self.get_all_items(paging_xml)), 6)
 
         current_page, paging_xml = ph.get_paging_xml(logger, items_number=100, items_on_page=10)
-        self.assertEqual(len(self.get_all_items(paging_xml)), 10)
+        self.assertEqual(len(self.get_all_items(paging_xml)), 6)
 
         current_page, paging_xml = ph.get_paging_xml(logger, items_number=91, items_on_page=10)
-        self.assertEqual(len(self.get_all_items(paging_xml)), 10)
+        self.assertEqual(len(self.get_all_items(paging_xml)), 6)
 
         current_page, paging_xml = ph.get_paging_xml(logger, items_number=95, items_on_page=10)
-        self.assertEqual(len(self.get_all_items(paging_xml)), 10)
+        self.assertEqual(len(self.get_all_items(paging_xml)), 6)
 
     def test_dots(self):
         for cur_page in range(90, 94):
