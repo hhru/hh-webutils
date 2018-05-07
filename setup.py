@@ -39,7 +39,8 @@ setup(
     tests_require=[
         'nose',
         'lxml-asserts',
-        'pycodestyle == 2.0.0'
+        'pycodestyle == 2.0.0',
+        'freezegun'
     ],
     zip_safe=False
 )
