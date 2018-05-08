@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.31) unstable; urgency=medium
+
+  * HH-78568 Add minutes_ago_to_human_readable
+
+ -- Automated Build <i.shubin@hh.ru>  Tue, 08 May 2018 18:28:42 +0300
+
 python-hhwebutils (0.0.30) unstable; urgency=medium
 
   * HH-78245 update the default amount of pager list items
