@@ -1,3 +1,9 @@
+python-hhwebutils (0.0.32) unstable; urgency=medium
+
+  * HH-83566 t.me support
+
+ -- Automated Build <a.pertsev@hh.ru>  Tue, 25 Sep 2018 20:09:31 +0300
+
 python-hhwebutils (0.0.31) unstable; urgency=medium
 
   * HH-78568 Add minutes_ago_to_human_readable
