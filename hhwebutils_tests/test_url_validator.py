@@ -101,6 +101,7 @@ class TestUrlValidator(unittest.TestCase):
     def test_invalid_path(self):
         self.assertEqual(url_validator.validate('hh.ru'), None)
         self.assertEqual(url_validator.validate('hh.ru', 'validate'), 'http://hh.ru')
+        self.assertEqual(url_validator.validate('t.me', 'validate'), 'http://t.me')
         self.assertEqual(url_validator.validate('http://%68%68%2E%72%75/%6C%6F%67\t%6F%66%66%2E%64%6F'), None)
         self.assertEqual(url_validator.validate('http://%68%68%2E%72%75/%6C%6F%67%09%6F%66%66%2E%64%6F'), None)
 

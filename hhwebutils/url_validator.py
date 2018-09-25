@@ -9,7 +9,7 @@ _invalid_characters = list(map(chr, list(range(ord('\x00'), ord('\x20'))) + [ord
 quoted = map(quote, _invalid_characters)
 
 INVALID_CHARACTERS_REGEXP = re.compile('[' + ''.join(_invalid_characters) + ']' + '|' + '|'.join(quoted))
-HOST_PRIMITIVE_REGEXP = re.compile('^.{2,}.*\..{1,}$')
+HOST_PRIMITIVE_REGEXP = re.compile('^.+.*\..{1,}$')
 # Filter urls starts with javascript: or data:
 VALID_SCHEMES = ('http', 'https')
 
