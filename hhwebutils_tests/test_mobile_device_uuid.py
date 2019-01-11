@@ -2,7 +2,7 @@
 
 import unittest
 
-from hhwebutils.uuid import parse_uuid
+from hhwebutils.mobile_device_uuid import parse_uuid
 
 
 class TestUrls(unittest.TestCase):
@@ -27,10 +27,13 @@ class TestUrls(unittest.TestCase):
     def test_lowercase_uuid_parse(self):
         uuid_in_text = 'd7b64537-bfd1-4981-8b25-6c09e1163a3e'
         for ua in self.user_agents_patterns:
-            self.assertEqual(uuid_in_text, parse_uuid(ua.format(uuid_in_text)))
+            self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
 
     def test_no_uuid_value(self):
         self.assertIsNone(parse_uuid(
             'Mozilla/5.0 (Linux; Android 8.0.0; AUM-L29 Build/HONORAUM-L29; wv) AppleWebKit/537.36 (KHTML, '
             'like Gecko) Version/4.0 Chrome/66.0.3359.126 Mobile Safari/537.36'
         ))
+
+    def test_none_argument(self):
+        self.assertIsNone(parse_uuid(None))
