@@ -1,3 +1,12 @@
+python-hhwebutils (0.0.33) unstable; urgency=medium
+
+  * HH-87190 remove python3.3 build from travis
+  * HH-87190 rename to hhwebutils.mobile_device_uuid
+  * HH-87190 update regexp
+  * HH-87190 add uuid parse code
+
+ -- Automated Build <e.bokshitskiy@hh.ru>  Tue, 15 Jan 2019 01:12:10 +0300
+
 python-hhwebutils (0.0.32) unstable; urgency=medium
 
   * HH-83566 t.me support
