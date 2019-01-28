@@ -1,7 +1,6 @@
 import re
 
-# 01234567-89ab-cdef-0123-456789abcdef
-UUID_RE = re.compile('UUID:? ([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})', re.I)
+UUID_RE = re.compile('UUID:? ([\w\-]+)', re.I)
 
 
 def parse_uuid(user_agent):

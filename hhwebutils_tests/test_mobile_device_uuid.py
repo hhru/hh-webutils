@@ -16,7 +16,10 @@ class TestUrls(unittest.TestCase):
 
         'Mozilla/5.0 (Linux; Android 8.0.0; AUM-L29 Build/HONORAUM-L29; wv) AppleWebKit/537.36 (KHTML, like Gecko) '
         'Version/4.0 Chrome/66.0.3359.126 Mobile Safari/537.36 ru.hh.android/5.2.1.387, Device: AUM-L29, Android OS: '
-        '8.0.0 (UUID {})'
+        '8.0.0 (UUID {})',
+
+        'hh-justai-full-bot/1.0, channel: telegram UUID: {}',
+        'hh-justai-full-bot/1.0, channel: telegram UUID {}',
     ]
 
     def test_uppercase_uuid_parse(self):
@@ -26,6 +29,11 @@ class TestUrls(unittest.TestCase):
 
     def test_lowercase_uuid_parse(self):
         uuid_in_text = 'd7b64537-bfd1-4981-8b25-6c09e1163a3e'
+        for ua in self.user_agents_patterns:
+            self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
+
+    def test_uuid_without_dashes_parse(self):
+        uuid_in_text = '3922ad0a1b223fad50b8e43abb13cc35'
         for ua in self.user_agents_patterns:
             self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
 
