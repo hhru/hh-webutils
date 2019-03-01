@@ -14,6 +14,8 @@ class Device(object):
 
 
 def get_device_type(user_agent):
+    if user_agent is None:
+        return None
     # WP имеет в user agent строку "iPhone", поэтому детектим его сначала
     if re.search(WINDOWS_PHONE, user_agent):
         return Device.WINDOWS_PHONE
