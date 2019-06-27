@@ -4,9 +4,13 @@ from lxml import etree
 
 
 def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, items_on_page=10,
-                   paging_links_number=5, user_agent=''):
+                   paging_links_number=5, short_paging_links_number=3, user_agent=''):
+    """
+    short_paging_links_number used for short version of pager, short pages mark with inShortRange=true
+    """
     current_page, paging = get_paging(
-        logger, items_number, total_pages, current_page, items_on_page, paging_links_number, user_agent
+        logger, items_number, total_pages, current_page, items_on_page, paging_links_number, short_paging_links_number,
+        user_agent
     )
 
     if paging is None:
@@ -20,7 +24,8 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
         etree.SubElement(el_pager, 'firstPage', page=str(paging['firstPage']['page']))
 
     for item in paging.get('pages', []):
-        el = etree.SubElement(el_pager, 'item', text=item['text'], page=str(item['page']))
+        el = etree.SubElement(el_pager, 'item', text=item['text'], inShortRange=str(item['inShortRange']),
+                              page=str(item['page']))
         if item.get('selected'):
             el.set('selected', 'true')
 
@@ -36,7 +41,7 @@ def get_paging_xml(logger, items_number=None, total_pages=None, current_page=0, 
 
 
 def get_paging(logger, items_number=None, total_pages=None, current_page=0, items_on_page=10,
-               paging_links_number=10, user_agent=''):
+               paging_links_number=10, short_paging_links_number=3, user_agent=''):
     """
     :raise TypeError: if no one of `items_number` nor `total_pages` specified or specified both
 
@@ -45,8 +50,14 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
     if (items_number is None) == (total_pages is None):
         raise TypeError('Only one of items_number or total_pages should be specified')
 
+    if short_paging_links_number > paging_links_number:
+        logger.error(('Paging generator: '
+                      'short_paging_links_number ({0!r}) should be less than paging_links_number ({1!r})')
+                     .format(short_paging_links_number, paging_links_number))
+
     try:
-        current_page, items_on_page, paging_links_number = map(int, (current_page, items_on_page, paging_links_number))
+        current_page, items_on_page, paging_links_number, short_paging_links_number = \
+            map(int, (current_page, items_on_page, paging_links_number, short_paging_links_number))
 
         if items_on_page < 1:
             raise ValueError('Items_on_page must be greater then 0')
@@ -77,6 +88,13 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
         end_page = max_page
         start_page = max(0, end_page - paging_links_number)
 
+    start_page_short = max(0, current_page - short_paging_links_number // 2)
+
+    end_page_short = start_page_short + short_paging_links_number - 1
+    if end_page_short > max_page:
+        end_page_short = max_page
+        start_page_short = max(0, end_page_short - short_paging_links_number + 1)
+
     pager = {
         'previous': {
             'page': current_page - 1,
@@ -85,11 +103,12 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
         'pages': []
     }
 
-    def add_page(text, page, selected=False):
+    def add_page(text, page, selected=False, in_short_range=False):
         pager['pages'].append({
             'text': text,
             'page': page,
             'selected': selected,
+            'inShortRange': in_short_range
         })
 
     if start_page > 0:
@@ -100,7 +119,7 @@ def get_paging(logger, items_number=None, total_pages=None, current_page=0, item
         }
 
     for i in range(start_page, end_page + 1):
-        add_page(str(i + 1), i, i == current_page)
+        add_page(str(i + 1), i, i == current_page, start_page_short <= i <= end_page_short)
 
     if end_page < max_page:
         add_page('...', min(max_page, current_page + paging_links_number))
