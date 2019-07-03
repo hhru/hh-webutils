@@ -8,8 +8,8 @@ from hhwebutils.compat import quote, unquote, urlparse, unicode_type
 _invalid_characters = list(map(chr, list(range(ord('\x00'), ord('\x20'))) + [ord('\x7F')]))
 quoted = map(quote, _invalid_characters)
 
-INVALID_CHARACTERS_REGEXP = re.compile('[' + ''.join(_invalid_characters) + ']' + '|' + '|'.join(quoted))
-HOST_PRIMITIVE_REGEXP = re.compile('^.+.*\..{1,}$')
+INVALID_CHARACTERS_REGEXP = re.compile('[' + ''.join(_invalid_characters) + ']' + '|' + '|'.join(quoted) + '|;| ')
+HOST_PRIMITIVE_REGEXP = re.compile('^.+\..{1,}$')
 # Filter urls starts with javascript: or data:
 VALID_SCHEMES = ('http', 'https')
 

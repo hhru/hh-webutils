@@ -11,7 +11,7 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(url_validator.validate('', 'filter'), None)
         self.assertEqual(url_validator.validate('', 'validate'), None)
 
-        self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru'), 'http://xfdf"dsy   a.ru')
+        self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru'), None)
         self.assertEqual(url_validator.validate('http//fasdfsdf^&^&#.ru'), None)
         self.assertEqual(url_validator.validate('jav&#x0A;ascript:alert("XSS");'), None)
         self.assertEqual(url_validator.validate('http://h\th.ru'), None)
@@ -35,7 +35,7 @@ class TestUrlValidator(unittest.TestCase):
         )
 
         self.assertEqual(url_validator.validate('jav&#x09;ascript:alert("XSS");'), None)
-        self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru', 'filter'), 'http://xfdf"dsy   a.ru')
+        self.assertEqual(url_validator.validate('http://xfdf"dsy   a.ru', 'filter'), 'http://xfdf"dsya.ru')
         self.assertEqual(url_validator.validate('http//fasdfsdf^&^&#.ru', 'filter'), None)
         self.assertEqual(
             url_validator.validate('jav&#x0A;ascript:alert("XSS");', 'filter'), None
@@ -53,6 +53,11 @@ class TestUrlValidator(unittest.TestCase):
                 '&#88;&#83;&#83;&#39;&#41;', 'filter'
             ),
             None
+        )
+
+        self.assertEqual(
+            url_validator.validate('http://example.com; https://foo.bar^%#$^%#^#', 'filter'),
+            'http://example.comhttps://foo.bar^%#$^%#^#'
         )
 
         self.assertEqual(
@@ -82,9 +87,7 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(url_validator.validate('//ff.ru', 'validate'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('http://www.ff.ru/dfd"fs', 'validate'), 'http://www.ff.ru/dfd"fs')
         self.assertEqual(url_validator.validate("javascript:alert('aa');", 'validate'), None)
-        self.assertEqual(
-            url_validator.validate('javascript:alert(document.cookie);', 'validate'), 'http://alert(document.cookie);'
-        )
+        self.assertEqual(url_validator.validate('javascript:alert(document.cookie);', 'validate'), None)
 
         self.assertEqual(url_validator.validate('//ff.ru', 'filter'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('ff.ru?a=10#fff', 'filter'), 'http://ff.ru?a=10#fff')
@@ -94,9 +97,6 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(url_validator.validate('ttp:/ff.ru', 'filter'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('ttp://ff.ru', 'filter'), 'http://ff.ru')
         self.assertEqual(url_validator.validate('ff.ru', 'filter'), 'http://ff.ru')
-        self.assertEqual(
-            url_validator.validate('javascript:alert(document.cookie);', 'filter'), 'http://alert(document.cookie);'
-        )
 
     def test_invalid_path(self):
         self.assertEqual(url_validator.validate('hh.ru'), None)
@@ -107,7 +107,7 @@ class TestUrlValidator(unittest.TestCase):
 
         self.assertEqual(url_validator.validate('/logoff.do', 'validate'), 'http://logoff.do')
         self.assertEqual(url_validator.validate('http://hh.ru/l\togoff.do', 'validate'), None)
-        self.assertEqual(url_validator.validate('www.hh.ru/l ogoff.do', 'filter'), 'http://www.hh.ru/l ogoff.do')
+        self.assertEqual(url_validator.validate('www.hh.ru/l ogoff.do', 'filter'), 'http://www.hh.ru/logoff.do')
         self.assertEqual(url_validator.validate('?a=123', 'filter'), None)
         self.assertEqual(url_validator.validate('?logoff.do', 'filter'), None)
 
@@ -316,7 +316,7 @@ class TestUrlValidator(unittest.TestCase):
         self.assertEqual(validate_backurl('javascript:alert(1);'), '/')
         self.assertEqual(validate_backurl('javascript:alert(1)'), '/')
         self.assertEqual(validate_backurl('//javascript:alert(1);'), '/')
-        self.assertEqual(validate_backurl('/javascript:alert(1);'), '/javascript:alert(1);')
+        self.assertEqual(validate_backurl('/javascript:alert(1);'), '/')
         self.assertEqual(validate_backurl('//javascript:alert(1)'), '/')
         self.assertEqual(validate_backurl('/javascript:alert(1)'), '/javascript:alert(1)')
         self.assertEqual(validate_backurl('/%5cjavascript:alert(1);'), '/')
