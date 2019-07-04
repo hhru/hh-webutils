@@ -217,10 +217,10 @@ class TestPageHelpersPaging(LxmlTestCaseMixin, unittest.TestCase):
         expected = '''
             <pager>
                 <previous disabled="False" page="0"/>
-                <item text="1" page="0"/>
-                <item text="2" page="1" selected="true"/>
-                <item text="3" page="2"/>
-                <item text="4" page="3"/>
+                <item text="1" inShortRange="True" page="0"/>
+                <item text="2" inShortRange="True" page="1" selected="true"/>
+                <item text="3" inShortRange="True" page="2"/>
+                <item text="4" inShortRange="False" page="3"/>
                 <next disabled="False" page="2"/>
                 <os>Win</os>
             </pager>
@@ -233,10 +233,10 @@ class TestPageHelpersPaging(LxmlTestCaseMixin, unittest.TestCase):
         expected = '''
             <pager>
                 <previous disabled="False" page="2"/>
-                <item text="1" page="0"/>
-                <item text="2" page="1"/>
-                <item text="3" page="2"/>
-                <item text="4" page="3" selected="true"/>
+                <item text="1" inShortRange="False" page="0"/>
+                <item text="2" inShortRange="True" page="1"/>
+                <item text="3" inShortRange="True" page="2"/>
+                <item text="4" inShortRange="True" page="3" selected="true"/>
                 <next disabled="True" page="4"/>
                 <os>Win</os>
             </pager>

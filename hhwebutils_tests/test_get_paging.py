@@ -216,10 +216,10 @@ class TestPageHelpersPaging(unittest.TestCase):
                 'page': 0
             },
             'pages': [
-                {'text': '1', 'page': 0, 'selected': False},
-                {'text': '2', 'page': 1, 'selected': True},
-                {'text': '3', 'page': 2, 'selected': False},
-                {'text': '4', 'page': 3, 'selected': False}
+                {'inShortRange': True, 'text': '1', 'page': 0, 'selected': False},
+                {'inShortRange': True, 'text': '2', 'page': 1, 'selected': True},
+                {'inShortRange': True, 'text': '3', 'page': 2, 'selected': False},
+                {'inShortRange': False, 'text': '4', 'page': 3, 'selected': False}
 
             ],
             'next': {
@@ -239,10 +239,10 @@ class TestPageHelpersPaging(unittest.TestCase):
                 'page': 2
             },
             'pages': [
-                {'text': '1', 'page': 0, 'selected': False},
-                {'text': '2', 'page': 1, 'selected': False},
-                {'text': '3', 'page': 2, 'selected': False},
-                {'text': '4', 'page': 3, 'selected': True}
+                {'inShortRange': False, 'text': '1', 'page': 0, 'selected': False},
+                {'inShortRange': True, 'text': '2', 'page': 1, 'selected': False},
+                {'inShortRange': True, 'text': '3', 'page': 2, 'selected': False},
+                {'inShortRange': True, 'text': '4', 'page': 3, 'selected': True}
 
             ],
             'next': {
