@@ -81,3 +81,23 @@ class EmailValidatorTestCase(TestCase):
 
     def test_no_at_sign_and_bad_domain(self):
         self.assertFalse(is_email_valid('hooray'))
+
+    def test_by_the_pertsev(self):
+        valid_emails = (
+            'ivan@ivanov.ru',
+            'ivan@ivanov.org.ru',
+            'ivan@ivanov-org.ru',
+            'ivan+ivanov@ivanov-org.ru',
+            'ivan-ivanov@ivanov.org.ru',
+            'ivan_ivanov@ivanov.org.ru',
+            'ivan.ivanov@ivanov.org.ru',
+            'иван@иванов.рф',
+            'иван-иванов@иванов.рф',
+            'иван+иванов@иванов.рф',
+            'иван90@иванов1.рф',
+            'ivan@ivanov.r',
+            'ivan@ivanov.aaaaaaaaaaaaaaaa',
+            'ivan@ivanov.ru1'
+        )
+        for email in valid_emails:
+            self.assertTrue(email)
