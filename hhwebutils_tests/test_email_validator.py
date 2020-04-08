@@ -22,6 +22,9 @@ class EmailValidatorTestCase(TestCase):
     def test_ignore_case(self):
         self.assertTrue(is_email_valid('Me@Mvx.Io'))
 
+    def test_cyrillic_letters(self):
+        self.assertTrue(is_email_valid('Борис1@Ельцин.рф'))
+
     def test_no_domain(self):
         self.assertFalse(is_email_valid('me@.io'))
 
