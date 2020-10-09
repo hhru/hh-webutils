@@ -33,6 +33,7 @@ def parse_user_agent(user_agent):
     if android_match:
         return {
             'platform': 'android',
+            'user_platform': 'android',
             'app': 'employer' if android_match.group(1) in ANDROID_EMPLOYER_USER_AGENTS else 'applicant',
             'version': android_match.group(2),
         }
@@ -41,6 +42,7 @@ def parse_user_agent(user_agent):
     if ios_match:
         return {
             'platform': 'ios',
+            'user_platform': 'ios',
             'app': 'employer' if ios_match.group(1) in IOS_EMPLOYER_USER_AGENTS else 'applicant',
             'version': ios_match.group(2),
         }
