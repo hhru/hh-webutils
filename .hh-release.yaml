@@ -1,7 +1,3 @@
-version: 0.0.43
-docker_context: .
-build_docker_file: docker/Dockerfile.building
-build_method: nope_build
-update_method: python_update
-python_version_file: hhwebutils/version.py
-deploy_method: nope_deploy
+{version: 0.0.44, docker_context: ., build_docker_file: docker/Dockerfile.building,
+  build_method: nope_build, update_method: python_update, python_version_file: hhwebutils/version.py,
+  deploy_method: nope_deploy}
