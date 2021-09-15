@@ -5,7 +5,7 @@ from collections import Mapping
 
 import urllib
 
-from hhwebutils.compat import unicode_type, urlencode, urlparse
+from hhwebutils.compat import unicode_type, urlencode, urlparse, quote, unquote
 
 
 def update_url(url, update_args=None, remove_args=None):
@@ -24,7 +24,7 @@ def update_url(url, update_args=None, remove_args=None):
     else:
         url = '//' + url_new
 
-    url_split = urlparse.urlsplit(_to_native_string(url))
+    url_split = urlparse.urlsplit(quote(_to_native_string(url)))
     query_dict = urlparse.parse_qs(url_split.query, keep_blank_values=True)
 
     if update_args:
@@ -40,7 +40,7 @@ def update_url(url, update_args=None, remove_args=None):
     # http://bugs.python.org/issue8339 (wont fix).
     # warning: does not preserve original string type
     if not url_split.netloc:
-        return ''.join([
+        return unquote(''.join([
             _to_native_string(scheme),
             '://' if scheme else '',
             url_split.path,
@@ -48,7 +48,7 @@ def update_url(url, update_args=None, remove_args=None):
             _to_native_string(query),
             '#' if url_split.fragment else '',
             _to_native_string(url_split.fragment)
-        ])
+        ]))
 
     result = urlparse.urlunsplit(
         [_to_native_string(part) for part in (scheme, url_split.netloc, url_split.path, query, url_split.fragment)]
@@ -58,7 +58,7 @@ def update_url(url, update_args=None, remove_args=None):
     if trim_fake_slashes and result.startswith('//'):
         result = result[2:]
 
-    return result
+    return unquote(result)
 
 
 def _to_native_string(s):
