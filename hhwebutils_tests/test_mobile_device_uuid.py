@@ -20,6 +20,8 @@ class TestUrls(unittest.TestCase):
 
         'hh-justai-full-bot/1.0, channel: telegram UUID: {}',
         'hh-justai-full-bot/1.0, channel: telegram UUID {}',
+
+        'bots (UUID: {})',
     ]
 
     def test_uppercase_uuid_parse(self):
@@ -34,6 +36,11 @@ class TestUrls(unittest.TestCase):
 
     def test_uuid_without_dashes_parse(self):
         uuid_in_text = '3922ad0a1b223fad50b8e43abb13cc35'
+        for ua in self.user_agents_patterns:
+            self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
+
+    def test_uuid_with_viber_user_id(self):
+        uuid_in_text = 'bots__33680e3383079ef5e0c0d386719ce663b61003e3__vb__+Cs3kIt03ZrX/12Vu9PgA=%3D'
         for ua in self.user_agents_patterns:
             self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
 
