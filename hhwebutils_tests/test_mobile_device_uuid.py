@@ -40,7 +40,7 @@ class TestUrls(unittest.TestCase):
             self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
 
     def test_uuid_with_viber_user_id(self):
-        uuid_in_text = 'bots__33680e3383079ef5e0c0d386719ce663b61003e3__vb__+Cs3kIt03ZrX/12Vu9PgA=%3D'
+        uuid_in_text = 'bots__33680e3383079ef5e0c0d386719ce663b61003e3__vb__+Cs3kIt03ZrX/12Vu9PgA=='
         for ua in self.user_agents_patterns:
             self.assertEqual(uuid_in_text.upper(), parse_uuid(ua.format(uuid_in_text)))
 
