@@ -1,6 +1,6 @@
 import re
 
-UUID_RE = re.compile('UUID:? ([-\w/+=%]+)', re.I)
+UUID_RE = re.compile('UUID:? ([-\w/+=]+)', re.I)
 
 
 def parse_uuid(user_agent):
