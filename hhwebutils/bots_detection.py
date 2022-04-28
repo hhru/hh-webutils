@@ -4,7 +4,7 @@ import re
 from hhwebutils import compat
 
 
-SEARCH_BOTS = {
+SEARCH_BOTS_DESKTOP = {
     # ОСНОВНЫЕ
     'Mail.RU_Bot': r'Mail.RU_Bot/\d',
     'Mail.RU_Bot_Fast': 'Mail.RU_Bot/Fast/',
@@ -25,7 +25,6 @@ SEARCH_BOTS = {
     'YandexMarket': 'YandexMarket/',
     'YandexMedia': 'YandexMedia/',
     'YandexMetrika': 'YandexMetrika/',
-    'YandexMobileBot': 'YandexMobileBot/',
     'YandexNews': 'YandexNews/',
     'YandexNewslinks': 'YandexNewslinks',
     'YandexPagechecker': 'YandexPagechecker/',
@@ -38,16 +37,13 @@ SEARCH_BOTS = {
     'YandexZakladki': 'YandexZakladki/',
     'Googlebot': 'Googlebot/',
     'Googlebot-Image': 'Googlebot-Image/',
-    'Googlebot-Mobile': 'Googlebot-Mobile/',
     'Googlebot-News': 'Googlebot-News',
     'Googlebot-Video': 'Googlebot-Video/',
     'Google-Read-Aloud': 'Google-Read-Aloud',
     'Google-Favicon': 'Google Favicon',
     'Mediapartners': 'Mediapartners-Google/',
     'Mediapartners-Google': '^Mediapartners-Google$',
-    'Mediapartners-Google_mobile': 'Mediapartners-Google/',
     'AdsBot-Google': 'AdsBot-Google',
-    'AdsBot-Google-Mobile-Apps': 'AdsBot-Google-Mobile-Apps',
     'FeedFetcher-Google': 'FeedFetcher-Google',
     'DuplexWeb-Google': 'DuplexWeb-Google/',
     # менее известные
@@ -68,7 +64,21 @@ SEARCH_BOTS = {
     'ScoutJet': 'ScoutJet'
 }
 
-SEARCH_BOTS = {bot_name: re.compile(pattern) for bot_name, pattern in compat.iteritems(SEARCH_BOTS)}
+SEARCH_BOTS_MOBILE = {
+    'YandexMobileBot': 'YandexMobileBot/',
+    'YandexMobileScreenShotBot': 'YandexMobileScreenShotBot/',
+    'Googlebot-Smartphone': 'Nexus.*Googlebot',
+    'AdsBot-Google-Mobile': 'AdsBot-Google-Mobile',
+    'Googlebot-Mobile': 'Googlebot-Mobile/',
+    'Mediapartners-Google_mobile': 'Mediapartners-Google/',
+    'AdsBot-Google-Mobile-Apps': 'AdsBot-Google-Mobile-Apps',
+}
+
+SEARCH_BOTS = {
+    bot_name: re.compile(pattern) for bot_name, pattern in compat.iteritems(
+        {**SEARCH_BOTS_DESKTOP, **SEARCH_BOTS_MOBILE}
+    )
+}
 
 
 def get_bot_name(user_agent):
@@ -77,3 +87,7 @@ def get_bot_name(user_agent):
             return bot_name
 
     return None
+
+
+def is_mobile_search_bot(search_bot_name):
+    return search_bot_name in SEARCH_BOTS_MOBILE
