@@ -76,7 +76,7 @@ SEARCH_BOTS_MOBILE = {
 
 SEARCH_BOTS = {
     bot_name: re.compile(pattern) for bot_name, pattern in compat.iteritems(
-        {**SEARCH_BOTS_DESKTOP, **SEARCH_BOTS_MOBILE}
+        {**SEARCH_BOTS_MOBILE, **SEARCH_BOTS_DESKTOP}
     )
 }
 
