@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hh-webutils
+  annotations:
+    github.com/project-slug: hhru/hh-webutils
+  tags:
+    - backend
+    - python
+spec:
+  type: library
+  lifecycle: production
