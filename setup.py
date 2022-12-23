@@ -28,7 +28,6 @@ setup(
     name='hhwebutils',
     version=__import__('hhwebutils').__version__,
     description='hh.ru python common web utility library',
-    long_description=open('README.md').read(),
     url='https://github.com/hhru/hh-webutils',
     cmdclass={'build_py': BuildHook, 'test': TestHook},
     packages=find_packages(exclude=['hhwebutils_tests']),
