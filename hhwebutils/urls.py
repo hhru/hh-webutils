@@ -1,7 +1,7 @@
 # coding=utf-8
 
-from collections import Iterable
-from collections import Mapping
+from collections.abc import Iterable
+from collections.abc import Mapping
 
 import urllib
 
