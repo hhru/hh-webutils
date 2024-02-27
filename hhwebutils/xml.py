@@ -38,6 +38,10 @@ def xml_to_string(node, clean_xmlns=False, method='xml'):
 
 
 def strip_invalid_characters(string):
+    return replace_invalid_characters(string, replacement=u'')
+
+
+def replace_invalid_characters(string, *, replacement=u'\uFFFD'):
     if string is None:
         return u''
 
@@ -47,4 +51,6 @@ def strip_invalid_characters(string):
     elif not isinstance(string, unicode_type):
         string = unicode_type(string)
 
-    return _INVALID_CHARACTERS_REGEXP.sub(u'', string)
+    escaped_replacement = replacement.replace(u'\\', u'\\\\')
+
+    return _INVALID_CHARACTERS_REGEXP.sub(escaped_replacement, string)
