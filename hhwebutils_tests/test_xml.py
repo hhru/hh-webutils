@@ -1,11 +1,10 @@
 # coding=utf-8
-import sys
 import unittest
 
 from lxml import etree
 
 from hhwebutils.compat import unicode_type, unicode_chr
-from hhwebutils.xml import xml_to_string, strip_invalid_characters
+from hhwebutils.xml import xml_to_string, strip_invalid_characters, replace_invalid_characters
 
 
 def is_unicode_32bit_supported():
@@ -198,3 +197,13 @@ class StripInvalidCharactersTestCaseTestCase(unittest.TestCase):
 
     def test_none(self):
         self.assertEqual(strip_invalid_characters(None), u'')
+
+    def test_replace(self):
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty\uFFFEasd'), u'qwe\uFFFDrty\uFFFDasd')
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty\uFFFEasd', replacement=u''), u'qwertyasd')
+
+    def test_replace_with_slashes(self):
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty', replacement=u'aa\\bb'), u'qweaa\\bbrty')
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty', replacement=u'aa\\bb\ncc'), u'qweaa\\bb\nccrty')
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty', replacement=u'aa\\bb\\cc'), u'qweaa\\bb\\ccrty')
+        self.assertEqual(replace_invalid_characters(u'qwe\uFFFFrty', replacement=u'aa\\bb\\11'), u'qweaa\\bb\\11rty')
